@@ -1,0 +1,74 @@
+<app-header></app-header>
+<form
+  style="
+    border: 1px solid black;
+    border-radius: 0.8rem;
+    width: 70%;
+    margin: 0 auto;
+  "
+  [formGroup]="form"
+  (ngSubmit)="processForm()"
+>
+  <div style="margin-top: 0.4rem">
+    <label
+      style="
+        display: inline-block;
+        width: 50%;
+        margin: 0.25rem 1rem;
+        text-align: left;
+      "
+      for="signup-name"
+      >Display Name</label
+    ><input
+      style="display: inline-block; width: 90%; margin: 0 3%"
+      type="text"
+      formControlName="displayname"
+    />
+  </div>
+  <div style="">
+    <label
+      style="
+        display: inline-block;
+        width: 20%;
+        margin: 0.25rem 1rem;
+        text-align: left;
+      "
+      for="signup-email"
+      >Email</label
+    ><input
+      style="display: inline-block; width: 90%; margin: 0 3%"
+      type="email"
+      formControlName="email"
+    />
+  </div>
+  <div style="">
+    <label
+      style="
+        display: inline-block;
+        width: 20%;
+        margin: 0.25rem 1rem;
+        text-align: left;
+      "
+      for="signup-password"
+      >Password</label
+    ><input
+      style="display: inline-block; width: 90%; margin: 0 3%"
+      type="password"
+      formControlName="password"
+    />
+  </div>
+  <div style="display: flex; justify-content: center; margin: 0.3rem 0">
+    <button type="submit" [disabled]="form.invalid">Sign Up</button>
+  </div>
+
+  <div
+    style="
+      display: flex;
+      justify-content: center;
+      margin: 0.7rem 0;
+      font-size: 0.8rem;
+    "
+  >
+    Already have an account?&nbsp;<a [routerLink]="['/login']">Log In</a>
+  </div>
+</form>

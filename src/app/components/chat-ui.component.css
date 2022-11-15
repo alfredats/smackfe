@@ -1,0 +1,77 @@
+header {
+  z-index: 999;
+  overflow: visible;
+  height: 3vh;
+  position: sticky;
+  top: 0;
+  background: rgba(97, 31, 105, 0.9);
+  display: flex;
+  align-items: center;
+}
+
+.smack {
+  color: white; margin: 0 2%
+}
+
+.activeTab {
+  background-color: aliceblue;
+  margin-top: 0.4vh;
+  padding: 0.6vh 0.7vh;
+  height: 1.5vh;
+  margin-right: 0.5vh;
+}
+
+.inactiveTab {
+  background-color: rgb(167, 108, 167);
+  margin-top: 0.4vh;
+  padding: 0.5vh 0.7vh;
+  height: 1.5vh;
+  margin-right: 0.5vh;
+}
+
+.activeTabFont {
+  margin: 0;
+  display: inline-block;
+}
+
+.inactiveTabFont {
+  margin: 0;
+  display: inline-block;
+  color: rgb(50, 10, 50);
+}
+
+.msgdiv {
+  min-height: 91%;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.tadiv {
+  display: flex;
+  width: 98%;
+  background-color: white;
+  padding: 1%;
+}
+
+.stickyBot {
+  z-index: 999;
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+}
+
+textarea {
+  width: 93%;
+  height: 5vh;
+}
+
+@media screen and (max-width: 896px) {
+  textarea {
+    width: 93%;
+    height: 5vh;
+  }
+
+  .tadiv {
+    padding: 1%;
+  }
+}

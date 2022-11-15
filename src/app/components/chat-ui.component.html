@@ -1,0 +1,54 @@
+<header>
+  <h2 class="smack">Smack</h2>
+  <div
+    class="inactiveTab"
+    [ngClass]="{ activeTab: activeChat == 0, inactiveTab: activeChat != 0 }"
+    (click)="toggleActiveChat(0)"
+  >
+    <h4 class="activeTabFont">General</h4>
+  </div>
+  <div
+    class="inactiveTab"
+    [ngClass]="{ activeTab: activeChat == 1, inactiveTab: activeChat != 1 }"
+    (click)="toggleActiveChat(1)"
+  >
+    <h4 class="inactiveTabFont">Feedback</h4>
+  </div>
+  <div
+    class="inactiveTab"
+    [ngClass]="{ activeTab: activeChat == 2, inactiveTab: activeChat != 2 }"
+    (click)="toggleActiveChat(2)"
+  >
+    <h4 class="inactiveTabFont">EDMW</h4>
+  </div>
+</header>
+
+<div class="msgdiv">
+  <div>
+    <div *ngFor="let i of activeChatMsgs">
+      <div style="padding-left: 0.5rem">
+        <h5 style="margin: 0.1rem; display: inline-block">
+          {{ i.uiDisplayName || "" }}
+        </h5>
+        <em style="font-size: 0.7rem"
+          >{{ i.uiDatetime.toLocaleDateString("en-SG") || "" }}
+          {{ i.uiDatetime.toLocaleTimeString("en-SG") || "" }}</em
+        >
+        <p style="margin: 0; white-space: pre-wrap" [innerHTML]="i.message"></p>
+      </div>
+      <hr *ngIf="i.creationDatetime > 0" />
+    </div>
+  </div>
+</div>
+<div class="stickyBot">
+  <form
+    style="margin: 0"
+    [formGroup]="chatForm"
+    (keyup.enter)="processForm()"
+  >
+    <div class="tadiv">
+      <textarea formControlName="messageToSend"></textarea>
+      <button type="button" (click)="processForm()">Send</button>
+    </div>
+  </form>
+</div>
