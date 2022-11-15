@@ -121,37 +121,38 @@ export class ChatUIComponent implements OnInit, OnDestroy, AfterViewChecked {
     // ACCOUNTING FOR /SPOTIFY MESSAGES
     const msgsplit = msg.split(' ');
     if (msgsplit[0].toLowerCase() === '/spotify' && msgsplit.length > 1) {
-      const spot2msg = (x: any) => {
-        const t = {} as uiMsg;
-        t.uiDisplayName = 'SpotifyBot';
-        t.messageType = 10;
-        t.message =
-          x.artists.join(', ') +
-          ' - ' +
-          [x.trackname, `<a href="${x.play_url}">Play on Spotify</a>`].join(
-            '\n'
-          );
-        t.creationDatetime = 1;
-        t.uiDatetime = new Date();
-        return t;
-      };
       const queryStr = msg.toLowerCase().replace(/^\/spotify /, '');
-      this.chSvc.spotifySearch(queryStr).then((x) => {
-        const data = x.data as any[];
-        const ma = this.uiMsgMap.get(this.chatIds[this.activeChat])!;
-        if (data.length === 0) {
-          ma.push({
-            uiDisplayName: 'SpotifyBot',
-            message: `No results for ${queryStr}`,
-            uiDatetime: new Date(),
-          } as uiMsg);
-          return;
-        }
-        data.forEach((x) => {
-          ma.push(spot2msg(x));
-        });
-      });
+      const spt = await this.chSvc.spotifySearch(queryStr);
+      this.fs(queryStr, spt);
     }
+  }
+  private fs(queryStr: string, x: any) {
+    const data = x.data as any[];
+    const ma = this.uiMsgMap.get(this.chatIds[this.activeChat])!;
+    const spot2msg = (x: any) => {
+      const t = {} as uiMsg;
+      t.uiDisplayName = 'SpotifyBot';
+      t.messageType = 10;
+      t.message =
+        x.artists.join(', ') +
+        ' - ' +
+        [x.trackname, `<a href="${x.play_url}">Play on Spotify</a>`].join('\n');
+      t.creationDatetime = 1;
+      t.uiDatetime = new Date();
+      return t;
+    };
+
+    if (data.length === 0) {
+      ma.push({
+        uiDisplayName: 'SpotifyBot',
+        message: `No results for ${queryStr}`,
+        uiDatetime: new Date(),
+      } as uiMsg);
+      return;
+    }
+    data.forEach((x) => {
+      ma.push(spot2msg(x));
+    });
   }
 
   public scrollToBottom() {
