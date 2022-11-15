@@ -137,7 +137,10 @@ export class ChatUIComponent implements OnInit, OnDestroy, AfterViewChecked {
       t.message =
         x.artists.join(', ') +
         ' - ' +
-        [x.trackname, `<a href="${x.play_url}">Play on Spotify</a>`].join('\n');
+        [
+          x.trackname,
+          `<a href="${x.play_url}" target="_blank">Play on Spotify</a>`,
+        ].join('\n');
       t.creationDatetime = 1;
       t.uiDatetime = new Date();
       return t;
