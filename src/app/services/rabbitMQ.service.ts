@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { firstValueFrom, Observable, Subject } from 'rxjs';
+import { firstValueFrom, from, Observable, Subject } from 'rxjs';
 import { SmackMsg } from '../models/models';
 import {
   AMQPQueue,
@@ -33,10 +33,15 @@ export class RabbitMQService {
     return JSON.parse(msgBody) as SmackMsg;
   }
 
-  publishMsg(msg: SmackMsg): Promise<number> {
-    return this.ch.basicPublish(this.exchangeName, '', JSON.stringify(msg), {
-      contentType: 'text/plain',
-    });
+  publishMsg(msg: SmackMsg): Observable<number> {
+    return from(
+      this.ch.basicPublish(this.exchangeName, '', JSON.stringify(msg), {
+        contentType: 'text/plain',
+      }).then((v) => {
+        // console.log("Published " + JSON.stringify(msg));
+        return v;
+      })
+    );
   }
 
   async run(exchange: string): Promise<void> {
@@ -66,6 +71,7 @@ export class RabbitMQService {
     const consumer = await q.subscribe({ noAck: true }, (msg: AMQPMessage) => {
       const newMsg = this.parseMsgBody(msg);
       this.onReceive.next(newMsg);
+      return;
     });
 
     await consumer.wait();

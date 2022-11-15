@@ -1,6 +1,6 @@
 import { AfterViewChecked, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { SmackMsg } from '../models/models';
 import { RabbitMQService } from '../services/rabbitMQ.service';
 import { ChatHistoryService } from '../services/chatHistory.service';
@@ -52,7 +52,7 @@ export class ChatUIComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.activeChat = 0;
     this.activeChatMsgs = this.uiMsgMap.get(this.chatIds[this.activeChat])!;
     this.messageSub$ = this.mqSvc.onReceive.subscribe((msg: SmackMsg) => {
-      // console.log('Received msg');
+      // console.log('Received msg ' + JSON.stringify(msg));
       this.insertMsg(msg.chatId, msg);
     });
   }
@@ -115,7 +115,7 @@ export class ChatUIComponent implements OnInit, OnDestroy, AfterViewChecked {
       message: msg.trim(),
       creationDatetime: Math.ceil(Date.now() / 1000),
     };
-    const p: number = await this.mqSvc.publishMsg(msgBody);
+    this.mqSvc.publishMsg(msgBody).pipe(map(() => {}));
     this.chatForm = this.makeForm();
 
     // ACCOUNTING FOR /SPOTIFY MESSAGES
@@ -126,6 +126,7 @@ export class ChatUIComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.fs(queryStr, spt);
     }
   }
+
   private fs(queryStr: string, x: any) {
     const data = x.data as any[];
     const ma = this.uiMsgMap.get(this.chatIds[this.activeChat])!;
